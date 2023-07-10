@@ -2,22 +2,26 @@
 <title>Introduction</title>
 <para><phrase role="first-word">Welcome</phrase> to Dynamic Tracing in the illumos Operating System! If you have
 ever wanted to understand the behavior of your system, DTrace is the tool
-for you. DTrace is a comprehensive dynamic tracing facility that is built
-into illumos that can be used by administrators and developers on live production
+for you.</para>
+<para>DTrace is a comprehensive dynamic tracing facility that is built into
+illumos that can be used by administrators and developers on live production
 systems to examine the behavior of both user programs and of the operating
-system itself. DTrace enables you to explore your system to understand how
-it works, track down performance problems across many layers of software,
-or locate the cause of aberrant behavior. As you'll see, DTrace lets you create
+system itself. DTrace enables you to explore your system to understand how it
+works, track down performance problems across many layers of software, or
+locate the cause of aberrant behavior. As you'll see, DTrace lets you create
 your own custom programs to dynamically instrument the system and provide
-immediate, concise answers to arbitrary questions you can formulate using
-the DTrace D programming language. The first section of this chapter provides
-a quick introduction to DTrace and shows you how to write your very first
-D program. The rest of the chapter introduces the complete set of rules for
-programming in D as well as tips and techniques for performing in-depth analysis
-of your system. You can share your DTrace experiences and scripts with the rest of the
-DTrace community on the <link xl:href="http://dtrace.org/blogs/mailing-list/">DTrace discussion mailing list</link>.
-All of the example scripts presented in this guide can be found
-on your illumos system in the directory <filename>/usr/demo/dtrace</filename>.</para>
+immediate, concise answers to arbitrary questions you can formulate using the
+DTrace D programming language.</para>
+<para>The first section of this chapter provides a quick introduction to DTrace
+and shows you how to write your very first D program. The rest of the chapter
+introduces the complete set of rules for programming in D as well as tips and
+techniques for performing in-depth analysis of your system.</para>
+<para>You can share your DTrace experiences and scripts with the rest of the
+DTrace community on the
+<link xl:href="http://dtrace.org/blogs/mailing-list/">DTrace discussion mailing
+list</link>.  All of the example scripts presented in this guide can be found
+on your illumos system in the directory
+<filename>/usr/demo/dtrace</filename>.</para>
 <sect1 xml:id="chp-intro-1">
 <title>DTrace on other Operating Systems</title>
 <para>

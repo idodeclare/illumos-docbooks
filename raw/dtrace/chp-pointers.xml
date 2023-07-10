@@ -8,7 +8,7 @@ pointers, operators that can be applied to create or access pointers, and the
 relationship between pointers and fixed-size scalar arrays. Also discussed are
 issues relating to the use of pointers in different address spaces.</para>
 <note><para>If you are an experienced C or C++ programmer, you can skim most
-of this chapter as the D pointer syntax is the same as the corresponding ANSI-C
+of this chapter, as the D pointer syntax is the same as the corresponding ANSI-C
 syntax. You should read <xref linkend="chp-pointers-8" /> and <xref linkend="chp-pointers-9" />
 as they describe features and issues specific to DTrace.</para></note>
 <sect1 xml:id="chp-pointers-1">
@@ -31,7 +31,9 @@ trace(`kmem_flags);
 <title>Pointer Safety</title>
 <para><indexterm><primary>pointers</primary><secondary>safe use of</secondary></indexterm>If you are a C or C++ programmer, you may be a bit frightened after reading the previous section because you know that misuse of pointers in your programs can cause your programs to crash. DTrace is a robust, safe environment for executing your D programs where these mistakes cannot cause program crashes. You may indeed write a buggy D program, but invalid D pointer accesses will not cause DTrace or the operating system kernel to fail or crash in any way. Instead, the DTrace software will detect any invalid pointer accesses, disable your instrumentation, and report the problem back to you for debugging.</para>
 <para>If you have programmed in the Java programming language, you probably know that the Java language does not support pointers for precisely the same reasons of safety. Pointers are needed in D because they are an intrinsic part of the operating system's implementation in C, but DTrace implements the same kind of safety mechanisms found in the Java programming language that prevent buggy programs from damaging themselves or each other. DTrace's error reporting is similar to the run-time environment for the Java programming language that detects a programming error and reports an exception back to you.</para>
-<para>To see DTrace's error handling and reporting, write a deliberately bad D program using pointers. In an editor, type the following D program and save it in a file named <filename>badptr.d</filename>:</para>
+<para>To see DTrace's error handling and reporting, write a deliberately bad D
+program using pointers. In an editor, type the following D program, and save it
+in a file named <filename>badptr.d</filename>:</para>
 <example xml:id="ex-badptr.d">
 <title><filename>badptr.d</filename>: Demonstration of DTrace Error Handling</title>
 <programlisting>BEGIN
@@ -83,7 +85,7 @@ no relationship to the value storage locations.</para>
 <para>If you create an array using an initial assignment and use a single
 integer expression as the array index (for example, <literal>a[0] = 2</literal>),
 the D compiler will always create a new associative array, even
-though in this expression <literal>a</literal> could also be interpreted as an
+though in this expression, <literal>a</literal> could also be interpreted as an
 assignment to a scalar array. Scalar arrays must be predeclared in this
 situation so that the D compiler can see the definition of the array size and
 infer that the array is a scalar array.</para>
