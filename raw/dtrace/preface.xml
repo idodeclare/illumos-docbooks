@@ -20,7 +20,7 @@ Compatibility List</citetitle>.</para>
 <para>If you have ever wanted to understand the behavior of your system, DTrace
 is the tool for you. DTrace is a comprehensive dynamic tracing facility that
 is built into illumos. The DTrace facility can be used to examine the behavior
-of user programs and can also be used to examine the behavior
+of user programs and also the behavior
 of the operating system. DTrace can be used by system administrators or application
 developers and is suitable for use with live production systems. DTrace will
 allow you to explore your system to understand how it works, track down performance
