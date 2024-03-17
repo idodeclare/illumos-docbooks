@@ -1,90 +1,127 @@
 <chapter xml:id="chp-stab">
 <title>Stability</title>
-<para><phrase role="first-word">Sun often provides</phrase> developers with early access to new technologies
-as well as observability tools that allow users to peer into the internal
-implementation details of user and kernel software. Unfortunately, new technologies
-and internal implementation details are both prone to changes as interfaces
-and implementations evolve and mature when software is upgraded or patched.
-Sun documents application and interface stability levels using a set of labels
-described in the <citerefentry><refentrytitle>attributes</refentrytitle><manvolnum>7</manvolnum></citerefentry> man
-page to help set user expectations for what kinds of changes might occur in
-different kinds of future releases.</para><para>No one stability attribute appropriately describes the arbitrary set
+<para><phrase role="first-word">illumos often provides</phrase> developers with
+early access to new technologies as well as observability tools that allow
+users to peer into the internal implementation details of user and kernel
+software. Unfortunately, new technologies and internal implementation details
+are both prone to changes as interfaces and implementations evolve and mature
+when software is upgraded or patched. illumos documents application and
+interface stability levels using a set of labels described in the
+<citerefentry><refentrytitle>attributes</refentrytitle><manvolnum>7</manvolnum></citerefentry>
+man page to help set user expectations for what kinds of changes might occur in
+future revisions.</para>
+<para>No one stability attribute appropriately describes the arbitrary set
 of entities and services that can be accessed from a D program. DTrace and
 the D compiler therefore include features to dynamically compute and describe
 the stability levels of D programs you create. This chapter discusses the
 DTrace features for determining program stability to help you design stable
 D programs. You can use the DTrace stability features to inform you of the
-stability attributes of your D programs, or to produce compile-time errors
+stability attributes of your D programs or to produce compile-time errors
 when your program has undesirable interface dependencies.</para>
 <sect1 xml:id="chp-stab-1">
 <title>Stability Levels</title>
-<para><indexterm><primary>stability</primary></indexterm><indexterm><primary>stability</primary><secondary>levels</secondary></indexterm>DTrace provides two types
-of stability attributes for entities such as built-in variables, functions,
-and probes: a <firstterm>stability level</firstterm> and an architectural <firstterm>dependency class</firstterm>. The DTrace stability level assists you in making
-risk assessments when developing scripts and tools based on DTrace by indicating
-how likely an interface or DTrace entity is to change in a future release
-or patch. The DTrace dependency class tells you whether an interface is common
+<para><indexterm><primary>stability</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>levels</secondary></indexterm>
+DTrace provides two types of stability attributes for entities such as built-in
+variables, functions, and probes: a <firstterm>stability level</firstterm> and
+an architectural <firstterm>dependency class</firstterm>. The DTrace stability
+level assists you in making risk assessments when developing scripts and tools
+based on DTrace by indicating how likely an interface or DTrace entity is to
+change in a future revision.
+The DTrace dependency class tells you whether an interface is common
 to all illumos platforms and processors, or whether the interface is associated
 with a particular architecture such as SPARC processors only. The two types
-of attributes used to describe interfaces can vary independently.</para><para><indexterm><primary>stability</primary><secondary>values</secondary></indexterm>The stability values used by DTrace appear in the following list
-in order from lowest to highest stability. The more stable interfaces can
-be used by all D programs and layered applications because Sun will endeavor
-to ensure that these continue to work in future minor releases. Applications
+of attributes used to describe interfaces can vary independently.</para>
+<para><indexterm><primary>stability</primary><secondary>values</secondary></indexterm>
+The stability values used by DTrace appear in the following list in order from
+lowest to highest stability. The more stable interfaces can be used by all D
+programs and layered applications, because the illumos core team will endeavor
+to ensure that these continue to work in the future. Applications
 that depend only on Stable interfaces should reliably continue to function
-correctly on future minor releases and will not be broken by interim patches.
+correctly in the future and will not be broken by interim revisions.
 The less stable interfaces allow experimentation, prototyping, tuning, and
-debugging on your current system, but should be used with the understanding
-that they might change incompatibly or even be dropped or replaced with alternatives
-in future minor releases.</para><para>The DTrace stability values also help you understand the stability of
+debugging on your current system but should be used with the understanding that
+they might change incompatibly or even be dropped or replaced with alternatives
+in future revisions.</para>
+<para>The DTrace stability values also help you understand the stability of
 the software entities you are observing, in addition to the stability of the
 DTrace interfaces themselves. Therefore, DTrace stability values also tell
 you how likely your D programs and layered tools are to require corresponding
-changes when you upgrade or change the software stack you are observing.</para><variablelist termlength="narrow"><varlistentry><term>Internal</term><listitem><para><indexterm><primary>internal stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>internal</tertiary></indexterm>The interface is private to DTrace
-and represents an implementation detail of DTrace. Internal interfaces might
-change in minor or micro releases.</para>
+changes when you upgrade or change the software stack you are observing.</para>
+<variablelist termlength="narrow"><varlistentry><term>Internal</term><listitem>
+<para><indexterm><primary>internal stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>internal</tertiary></indexterm>The interface is private to DTrace and
+represents an implementation detail of DTrace. Internal interfaces might change
+in any future revision.</para>
 </listitem>
-</varlistentry><varlistentry><term>Private</term><listitem><para><indexterm><primary>private stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>private</tertiary></indexterm>The interface is private to Sun and
-represents an interface developed for use by other Sun products that is not
-yet publicly documented for use by customers and ISVs. Private interfaces
-might change in minor or micro releases.</para>
+</varlistentry><varlistentry><term>Private</term><listitem>
+<para><indexterm><primary>private stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>private</tertiary></indexterm>The interface is private to illumos and
+represents an interface developed for use by illumos distributions that is not
+yet publicly documented for use by the community. Private interfaces might
+change in any future revision.</para>
 </listitem>
-</varlistentry><varlistentry><term>Obsolete</term><listitem><para><indexterm><primary>obsolete stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>obsolete</tertiary></indexterm>The interface is supported in the
-current release but is scheduled to be removed, most likely in a future minor
-release. When support of an interface is to be discontinued, Sun will attempt
-to provide notification before discontinuing the interface. The D compiler
-might produce warning messages if you attempt to use an Obsolete interface.</para>
+</varlistentry><varlistentry><term>Obsolete</term><listitem>
+<para><indexterm><primary>obsolete stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>obsolete</tertiary></indexterm>The interface is supported in the
+current release but is scheduled to be removed. When support of an interface is
+to be discontinued, the illumos core team will attempt to provide a "flag day"
+notification to the community before discontinuing the interface. The D
+compiler might produce warning messages if you attempt to use an Obsolete
+interface.</para>
 </listitem>
-</varlistentry><varlistentry><term>External</term><listitem><para><indexterm><primary>external stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>external</tertiary></indexterm>The interface is controlled by an
-entity other than Sun. At Sun's discretion, Sun can deliver updated and possibly
-incompatible versions of such interfaces as part of any release, subject to
-their availability from the controlling entity. Sun makes no claims regarding
-either source or binary compatibility for External interfaces between any
-two releases. Applications based on these interfaces might not work in future
-releases, including patches that contain External interfaces.</para>
+</varlistentry><varlistentry><term>External</term><listitem>
+<para><indexterm><primary>external stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>external</tertiary></indexterm>The interface is controlled by an
+entity other than the illumos core team. At the discretion of the core team,
+illumos can deliver updated and possibly incompatible versions of such
+interfaces as part of any revision, subject to their availability from the
+controlling entity. The core team make no claims regarding either source or
+binary compatibility for External interfaces between any two revisions.
+Applications based on these interfaces might not work in future revisions,
+including revisions that contain External interfaces.</para>
 </listitem>
-</varlistentry><varlistentry><term>Unstable</term><listitem><para><indexterm><primary>unstable stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>unstable</tertiary></indexterm>The interface is provided to give
-developers early access to new or rapidly changing technology or to an implementation
-artifact that is essential for observing or debugging system behavior for
-which a more stable solution is anticipated in the future. Sun makes no claims
-about either source or binary compatibility for Unstable interfaces from one
-minor release to another.</para>
+</varlistentry><varlistentry><term>Unstable</term><listitem>
+<para><indexterm><primary>unstable stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>unstable</tertiary></indexterm>The interface is provided to give
+developers early access to new or rapidly changing technology or to an
+implementation artifact that is essential for observing or debugging system
+behavior for which a more stable solution is anticipated in the future. The
+illumos core team make no claims about either source or binary compatibility
+for Unstable interfaces from one revision to another.</para>
 </listitem>
-</varlistentry><varlistentry><term>Evolving</term><listitem><para><indexterm><primary>evolving stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>evolving</tertiary></indexterm>The interface might eventually become
-Standard or Stable but is still in transition. Sun will make reasonable efforts
-to ensure compatibility with previous releases as it evolves. When non-upward
-compatible changes become necessary, they will occur in minor and major releases.
-These changes will be avoided in micro releases whenever possible. If such
-a change is necessary, it will be documented in the release notes for the
-affected release, and when feasible, Sun will provide migration aids for binary
+</varlistentry><varlistentry><term>Evolving</term><listitem>
+<para><indexterm><primary>evolving stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>evolving</tertiary></indexterm>The interface might eventually become
+Standard or Stable but is still in transition. The illumos core team will make
+reasonable efforts to ensure compatibility with previous revisions as the
+interface evolves. When non-upward compatible changes become necessary, they
+may occur in any revision, but the core team will engage the community for
+awareness. When feasible, the core team will provide migration aids for binary
 compatibility and continued D program development.</para>
 </listitem>
-</varlistentry><varlistentry><term>Stable</term><listitem><para><indexterm><primary>stable stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>stable</tertiary></indexterm>The interface is a mature interface under Sun's control. Sun will
-try to avoid non-upward-compatible changes to these interfaces, especially
-in minor or micro releases. If support of a Stable interface must be discontinued,
-Sun will attempt to provide notification and the stability level changes to
-Obsolete.</para>
+</varlistentry><varlistentry><term>Stable</term><listitem>
+<para><indexterm><primary>stable stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>stable</tertiary></indexterm>The interface is a mature interface
+under control of the illumos core team, who will try to avoid
+non-upward-compatible changes to these interfaces. In the rare case where a
+change to a Stable interface is unavoidable, the core team will engage the
+community for awareness and will attempt to provide a "flag day" notification
+before modifying the illumos gate repository. If support of a Stable interface
+must be discontinued, the core team will engage the community for awareness,
+and the stability level will change to Obsolete.</para>
 </listitem>
-</varlistentry><varlistentry><term>Standard</term><listitem><para><indexterm><primary>standard stability value</primary></indexterm><indexterm><primary>stability</primary><secondary>values</secondary><tertiary>standard</tertiary></indexterm>The interface complies with an industry
+</varlistentry><varlistentry><term>Standard</term><listitem>
+<para><indexterm><primary>standard stability value</primary></indexterm>
+<indexterm><primary>stability</primary><secondary>values</secondary>
+<tertiary>standard</tertiary></indexterm>The interface complies with an industry
 standard. The corresponding documentation for the interface will describe
 the standard to which the interface conforms. Standards are typically controlled
 by a standards development organization, and changes can be made to the interface
@@ -93,8 +130,8 @@ can also apply to interfaces that have been adopted without a
 formal standard by an industry convention. Support is provided for only the
 specified versions of a standard; support for later versions is not guaranteed.
 If the standards development organization approves a non-upward-compatible
-change to a Standard interface that Sun decides to support, Sun will announce
-a compatibility and migration strategy.</para>
+change to a Standard interface that the illumos core team decide to support,
+they will announce a compatibility and migration strategy.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -169,17 +206,22 @@ written in the following order, separated by slashes:</para><literallayout><repl
 the stability level associated with its name as it appears in your D program
 or on the <citerefentry><refentrytitle>dtrace</refentrytitle><manvolnum>8</manvolnum></citerefentry> command-line.
 For example, the <literal>execname</literal> D variable is a Stable name:
-Sun guarantees that this identifier will continue to be supported in your
-D programs according to the rules described for Stable interfaces above.</para><para>The <firstterm>data stability</firstterm> of an interface is distinct
+the illumos core team guarantee that this identifier will continue to be
+supported in your D programs according to the rules described for Stable
+interfaces above.</para>
+<para>The <firstterm>data stability</firstterm> of an interface is distinct
 from the stability associated with the interface name. This stability level
-describes Sun's commitment to maintaining the data formats used by the interface
-and any associated data semantics. For example, the <literal>pid</literal> D
-variable is a Stable interface: process IDs are a Stable concept in illumos,
-and Sun guarantees that the <literal>pid</literal> variable will be of type <literal>pid_t</literal> with the semantic that it is set to the process ID corresponding
-to the thread that fired a given probe in accordance with the rules for Stable
-interfaces.</para><para>The <firstterm>dependency class</firstterm> of an interface is distinct
-from its name and data stability, and describes whether the interface is specific
-to the current operating platform or microprocessor.</para><para>DTrace and the D compiler track the stability attributes for all of
+describes the illumos core team's commitment to maintaining the data formats
+used by the interface and any associated data semantics.  For example, the
+<literal>pid</literal> D variable is a Stable interface: process IDs are a
+Stable concept in illumos, and the core team guarantee that the
+<literal>pid</literal> variable will be of type <literal>pid_t</literal> with
+the semantic that it is set to the process ID corresponding to the thread that
+fired a given probe in accordance with the rules for Stable interfaces.</para>
+<para>The <firstterm>dependency class</firstterm> of an interface is distinct
+from its name and data stability, and describes whether the interface is
+specific to the current operating platform or microprocessor.</para>
+<para>DTrace and the D compiler track the stability attributes for all of
 the DTrace interface entities, including providers, probe descriptions, D
 variables, D functions, types, and program statements themselves, as we'll
 see shortly. Notice that all three values can vary independently. For example,
@@ -253,14 +295,14 @@ as the stability of any probe arguments varies by provider.</para>
 the description is assigned the stability attributes Unstable/Unstable/Common
 because the description might end up matching probes of providers that do
 not yet exist when used on a future version of the operating system. As such,
-the illumos community is not able to provide guarantees about the future
+the illumos core team are not able to provide guarantees about the future
 stability and behavior of this program. You should always explicitly specify the
 provider when writing your D program clauses. In addition, any probe description
 fields that contain pattern matching characters (see <xref linkend="chp-prog" />)
 or macro variables such as <literal>$1</literal> (see <xref linkend="chp-script" />) are treated as
 if they are unspecified because these description patterns might expand to
-match providers or probes released by Sun in future versions of DTrace and
-the illumos OS.</para>
+match providers or probes added in future versions of DTrace and the illumos
+OS.</para>
 <para>Stability attributes are computed for most D language statements by
 taking the minimum stability and class of the entities in the statement. For
 example, the following D language entities have the following attributes:</para>
@@ -305,7 +347,7 @@ yields an expression whose stability attributes are the minimum of the input
 expression's attributes and the attributes of the cast output type.</para>
 <para>If you use the C preprocessor to include C system header files, these
 types will be associated with the C type namespace and will be assigned the
-attributes Stable/Stable/Common as the D compiler has no choice but to assume
+attributes Stable/Stable/Common, as the D compiler has no choice but to assume
 that you are taking responsibility for these declarations. It is therefore
 possible to mislead yourself about your program's stability if you use the
 C preprocessor to include a header file containing implementation artifacts.
