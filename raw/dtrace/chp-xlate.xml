@@ -97,11 +97,11 @@ D programmers can use to observe the state of their software packages.</para>
 <programlisting>xlate &lt; <replaceable>output-type</replaceable> &gt; ( <replaceable>input-expression</replaceable> )</programlisting>
 <para>For example, to invoke the hypothetical translator for FILE structs defined above and access the <literal>file_fd</literal> member, you would write the expression:</para>
 <programlisting>xlate &lt;struct file_info *&gt;(f)-&gt;file_fd;</programlisting>
-<para>where <literal>f</literal> is a D variable of type <literal>FILE
-*</literal>. The <literal>xlate</literal> expression itself is assigned the
-type defined by the <replaceable>output-type</replaceable>. Once a translator
-is defined, it can be used to translate input expressions to either the
-translator output struct type or to a pointer to that struct.</para>
+<para>where <literal>f</literal> is a D variable of type
+<literal>FILE *</literal>. The <literal>xlate</literal> expression itself is
+assigned the type defined by the <replaceable>output-type</replaceable>. Once a
+translator is defined, it can be used to translate input expressions to either
+the translator output struct type or to a pointer to that struct.</para>
 <para>If you translate an input expression to a struct, you can either dereference a particular member of the output immediately using the &ldquo;<literal>.</literal>&rdquo; operator, or you can assign the entire translated struct to another D variable to make a copy of the values of all the members. If you dereference a single member, the D compiler will only generate code corresponding to the expression for that member. You may not apply the <literal>&amp;</literal> operator to a translated struct to obtain its address, as the data object itself does not exist until it is copied or one of its members is referenced.</para>
 <para>If you translate an input expression to a pointer to a struct, you can
 either dereference a particular member of the output immediately using the
