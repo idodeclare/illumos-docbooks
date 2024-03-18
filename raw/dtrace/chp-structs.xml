@@ -46,7 +46,7 @@ source file:</para>
 <para>The <literal>struct</literal> keyword is followed by an optional identifier
 used to refer back to our new type, which is now known as <literal>struct callinfo</literal>.
 The struct members are then enclosed in a set of braces
-(<literal>{&#160;}</literal>) and the entire declaration is terminated by a
+(<literal>{&#160;}</literal>), and the entire declaration is terminated by a
 semicolon (<literal>;</literal>). Each struct member is defined using the same
 syntax as a D variable declaration, with the type of the member listed first
 followed by an identifier naming the member and another semicolon
@@ -142,8 +142,10 @@ of a user thread, upon which the illumos threads and POSIX threads interfaces
 are built. DTrace exports this information in the same form
 as the <filename>/proc</filename> filesystem files <filename>/proc/<replaceable>pid</replaceable>/psinfo</filename> and <filename>/proc/<replaceable>pid</replaceable>/lwps/<replaceable>lwpid</replaceable>/lwpsinfo</filename> for convenience. The <filename>/proc</filename> structures
 are used by observability and debugging tools such as <citerefentry><refentrytitle>ps</refentrytitle><manvolnum>1</manvolnum></citerefentry>, <citerefentry><refentrytitle>pgrep</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
-and <citerefentry><refentrytitle>truss</refentrytitle><manvolnum>1</manvolnum></citerefentry>, and are defined
-in the system header file <filename>&lt;sys/procfs.h&gt;</filename> and are described
+and
+<citerefentry><refentrytitle>truss</refentrytitle><manvolnum>1</manvolnum></citerefentry>;
+are defined in the system header file
+<filename>&lt;sys/procfs.h&gt;</filename>; and are described
 in the <citerefentry><refentrytitle>proc</refentrytitle><manvolnum>5</manvolnum></citerefentry> man
 page. Here are few example expressions using <literal>curpsinfo</literal>,
 their types, and their meanings:</para>
@@ -202,8 +204,9 @@ copy the results back into the user address space at the location specified
 to <citerefentry><refentrytitle>read</refentrytitle><manvolnum>2</manvolnum></citerefentry>.</para>
 <para>We can use the <citerefentry><refentrytitle>strings</refentrytitle><manvolnum>1</manvolnum></citerefentry> utility
 with the <option>a</option> option to force a bunch of reads from <filename>/dev/ksyms</filename>. Try running <command>strings -a /dev/ksyms</command> in your
-shell and see what output it produces. In an editor, type in the first clause
-of the example script and save it in a file named <filename>ksyms.d</filename>:</para>
+shell, and see what output it produces. In an editor, type in the first clause
+of the example script, and save it in a file named
+<filename>ksyms.d</filename>:</para>
 <programlisting>syscall::read:entry
 /curpsinfo-&gt;pr_psargs == "strings -a /dev/ksyms"/
 {
@@ -231,7 +234,7 @@ read 8192 bytes to user address 80639fc
 <para>This example can be extended using a common D programming technique
 to follow a thread from this initial <citerefentry><refentrytitle>read</refentrytitle><manvolnum>2</manvolnum></citerefentry> request deeper into the kernel. Upon entry to the
 kernel in <literal>syscall::read:entry</literal>, the next script sets a thread-local
-flag variable indicating this thread is of interest, and clears this flag
+flag variable indicating this thread is of interest and clears this flag
 on <literal>syscall::read:return</literal>. Once the flag is set, it can be
 used as a predicate on other probes to instrument kernel functions such as <citerefentry><refentrytitle>uiomove</refentrytitle><manvolnum>9F</manvolnum></citerefentry>. The DTrace function boundary
 tracing (<literal>fbt</literal>) provider publishes probes for entry and return
@@ -344,9 +347,9 @@ union</firstterm>. The member named <literal>value</literal> is of a union type
 described by the preceding declaration, but this union type itself has no name
 because it does not need to be used anywhere else.</para>
 <para>The struct member <literal>data_type</literal> is assigned a value that
-indicates which union member is valid for each object of type <literal>struct
-kstat_named</literal>. A set of C preprocessor tokens are defined for the
-values of <literal>data_type</literal>. For example, the token
+indicates which union member is valid for each object of type
+<literal>struct kstat_named</literal>. A set of C preprocessor tokens are
+defined for the values of <literal>data_type</literal>. For example, the token
 <literal>KSTAT_DATA_CHAR</literal> is equal to zero and indicates that the
 member <literal>value.c</literal> is where the value is currently
 stored.</para>
